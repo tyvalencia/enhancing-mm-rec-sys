@@ -1,14 +1,14 @@
 # Multimodal Recommender System using LVLMs
 
-**Authors:** Ty Valencia, Burak Barlas, Varun Singhal, Ruchir Bhatia
+**Authors:** Burak Barlas, Varun Singhal, Ty Valencia, Ruchir Bhatia
 
 ## Description
 
-This pipeline implements a multimodal recommendation system that leverages Large Vision-Language Models (LVLMs) to generate rich product representations. It provides this framework:
+This pipeline implements a multimodal recommendation system that uses rich product metadata (title, brand, features, description) to create semantic representations for improved recommendations. The repository contains this framework:
 
-1. Processes product data combining titles, images, and user interaction history
-2. Generates embeddings using Sentence-BERT for product representations
-3. Implements baseline models (title-only and LVLM-enhanced recommenders)
+1. Processes product data combining text, images, and user interaction history
+2. Generates embeddings using Sentence-BERT for semantic product representations
+3. Implements three baseline models: title-only, SMORE fusion, and LVLM-enhanced
 4. Evaluates recommendation quality using standard metrics (Recall@K, NDCG@K, Hit Rate@K)
 5. Supports integration with commercial LVLMs (Gemini, GPT-4V) or open-source models (LLaVA)
 
@@ -17,128 +17,101 @@ This pipeline implements a multimodal recommendation system that leverages Large
 ## Repository Structure
 ```text
 config/
-  default.yaml           # experiment configuration and model parameters
+  default.yaml                   # experiment configuration and model parameters
 data/
-  raw/                   # raw input data (interactions.csv)
-  processed/             # train/test splits
-  summaries/             # LVLM-generated product descriptions
+  raw/
+    archive/                     # Kaggle multimodal datasets (download separately)
+    amazon_metadata/             # Amazon product metadata (download via the download_amazon_metadata script)
+  processed/                     # preprocessed train/test splits and embeddings
+  summaries/                     # product summaries (metadata or LVLM-generated)
 scripts/
-  prepare_data.py        # data preprocessing and train/test splits
-  run_experiment.py      # main experiment runner, code orchestrator
-  generate_summaries.py  # LVLM summary generation pipeline
-  test_setup.py          # verify installation and dependencies
+  prepare_data.py                # preprocess Kaggle data, create splits
+  download_amazon_metadata.py    # download Amazon product metadata
+  match_metadata.py              # match Kaggle items with Amazon metadata
+  create_metadata_summaries.py   # create rich non-LLM summaries from metadata
+  generate_summaries.py          # generate summaries with LLMs (Gemini/GPT-4V) (optional atm, optimize)
+  run_experiment.py              # main orchestrator to run experiments
 src/
   __init__.py
-  dataset.py             # data loading and processing utilities
-  recommender.py         # baseline recommendation models
-  metrics.py             # evaluation metrics (Recall, NDCG, Hit Rate)
-results/                 # experiment outputs and performance logs
-requirements.txt         # dependencies to install
-README.md                # this documentation
-LICENSE                  # MIT license
+  dataset.py                     # data loading utilities
+  recommender.py                 # baseline models (Title, SMORE, LVLM)
+  metrics.py                     # evaluation metrics (Recall, NDCG, Hit Rate)
+results/                         # experiment outputs
+requirements.txt                 # Python dependencies
+README.md                        # this documentation
+LICENSE                          # MIT license
 ```
 
 ---
 
 ## How to Run
 
-### Install dependencies
+### Quick Start
 
-`pip install -r requirements.txt` <br>
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
 
-### Configure environment (optional)
+# 2. Prepare Kaggle dataset
+python scripts/prepare_data.py
 
-For LVLMs, create a `.env` file: <br>
-`GOOGLE_API_KEY=your_api_key_here` (for Gemini) <br>
-`OPENAI_API_KEY=your_api_key_here` (for GPT-4V) <br>
+# 3. Download Amazon metadata and create summaries
+python scripts/download_amazon_metadata.py --category Clothing_Shoes_and_Jewelry # good baseline, can also download other data
+python scripts/match_metadata.py
+python scripts/create_metadata_summaries.py
 
-### Prepare data
+# 4. Run experiments
+python scripts/run_experiment.py --model-type title_only --device cpu
+python scripts/run_experiment.py --model-type smore_fusion --device cpu
+python scripts/run_experiment.py --model-type lvlm_enhanced --device cpu
 
-`python scripts/prepare_data.py` <br>
+# 4a. Optional flags:
+- `--model-type`: Model to evaluate (`title_only` | `smore_fusion` | `lvlm_enhanced`)
+- `--device`: Compute device (`cpu` | `cuda`)
+- `--use-validation`: Evaluate on validation set instead of test
 
-### Run experiments
-
-`python scripts/run_experiment.py` 
-
-Which comes with the following flags: <br>
-
-#### --model-type
-Specifies which recommendation model to use. <br>
-`title_only` runs the baseline text-only model <br>
-`lvlm_enhanced` runs the multimodal model with LVLM summaries <br>
-
-#### --device
-Specifies compute device. <br>
-`cuda` uses GPU acceleration <br>
-`cpu` uses CPU only <br>
-
-#### --config
-Path to custom YAML configuration file (default: `config/default.yaml`).
-
----
-
-## Baseline Evaluation Scores
-
-**Title-Only Baseline:**
-* Recall@5: TBD
-* Recall@10: TBD
-* Recall@20: TBD
-* NDCG@5: TBD
-* NDCG@10: TBD
-* NDCG@20: TBD
-* Hit Rate@5: TBD
-* Hit Rate@10: TBD
-* Hit Rate@20: TBD
-
-**LVLM-Enhanced Model:**
-* Recall@5: TBD
-* Recall@10: TBD
-* Recall@20: TBD
-* NDCG@5: TBD
-* NDCG@10: TBD
-* NDCG@20: TBD
-* Hit Rate@5: TBD
-* Hit Rate@10: TBD
-* Hit Rate@20: TBD
-
----
-
-## Getting Data
-
-**📖 See [DATA_GUIDE.md](DATA_GUIDE.md) for detailed setup instructions with code examples.**
-
-### Recommended Datasets
-
-**1. Amazon Product Dataset (2018)** <br>
-Multi-category products with images, reviews, and interaction histories. <br>
-Download: [https://nijianmo.github.io/amazon/index.html](https://nijianmo.github.io/amazon/index.html) <br>
-Choose a category (e.g., "Electronics", "Clothing"), download the review data and metadata.
-
-**2. Amazon Reviews 2023** <br>
-Latest version with more products and reviews. <br>
-Download: [https://amazon-reviews-2023.github.io/](https://amazon-reviews-2023.github.io/)
-
-**3. Kaggle Datasets** <br>
-Search for "product recommendation" or "e-commerce": <br>
-[https://www.kaggle.com/datasets?search=product+recommendation](https://www.kaggle.com/datasets?search=product+recommendation)
-
-### Data Format
-
-Your CSV should be named `interactions.csv` and placed in `data/raw/` with these columns:
-
-```csv
-user_id,item_id,title,image_path,timestamp
-user_1,item_42,Blue Cotton T-Shirt,images/item_42.jpg,1609459200
+# Results saved to results/*.txt
 ```
 
-**Required columns:**
-- `user_id`: User identifier
-- `item_id`: Item identifier  
-- `title`: Product title
+### Optional: LLM-based Summaries
 
-**Optional columns:**
-- `image_path`: Path to product image
-- `timestamp`: Interaction timestamp (UNIX timestamp or ISO format)
+For research comparing metadata vs. LLM-generated summaries:
+
+```bash
+# Setup .env file
+echo "GEMINI_API_KEY=your_key_here" > .env
+
+# Generate LLM summaries (requires API key, too slow, better implementation with internal models to come)
+python scripts/generate_summaries.py --model gemini --max-items 100
+```
+
+---
+
+## Data Sources
+
+### 1. Kaggle Multimodal Dataset (Required)
+
+**Download:** [Kaggle Multimodal Recommendation System Dataset](https://www.kaggle.com/datasets/ignacioavas/alignmacrid-vae) (6GB)
+
+### 2. Amazon Product Metadata (For LVLM)
+
+**Source:** [Amazon Review Dataset (2018)](https://nijianmo.github.io/amazon/index.html)
+
+Provides real product titles, descriptions, and features for generating meaningful LVLM summaries instead of generic text.
+
+---
+
+## Experimental Results
+
+**Dataset:** Clothing, Shoes & Jewelry (23,318 users, 38,493 items)
+
+### Performance Comparison
+
+| Model | Recall@5 | NDCG@5 | Hit Rate@5 | Recall@10 | NDCG@10 | Hit Rate@10 |
+|-------|----------|--------|------------|-----------|---------|-------------|
+| **lvlm_enhanced** | **0.1962** | **0.1612** | **0.2380** | **0.2218** | **0.1700** | **0.2705** |
+| title_only | 0.1805 | 0.1479 | 0.2206 | 0.2090 | 0.1575 | 0.2539 |
+| smore_fusion | 0.1412 | 0.1139 | 0.1747 | 0.1720 | 0.1243 | 0.2118 |
 
 ---
 
@@ -149,6 +122,8 @@ user_1,item_42,Blue Cotton T-Shirt,images/item_42.jpg,1609459200
 [SMORE: Spectrum-based Modality Representation Fusion](https://arxiv.org/abs/2412.15442)
 
 [MMREC: LLM Based Multi-Modal Recommender System](https://arxiv.org/abs/2408.04211)
+
+[Amazon Review Dataset (2018)](https://nijianmo.github.io/amazon/index.html)
 
 ---
 

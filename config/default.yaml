@@ -1,0 +1,25 @@
+data:
+  dataset: "Clothing_Shoes_and_Jewelry-clip_clip"  # Put archive folder from dataset in data/raw/, pick from there
+  archive_path: "data/raw/archive"
+  processed_path: "data/processed"
+  summaries_path: "data/summaries"
+
+model:
+  type: "title_only"  # title_only, lvlm_enhanced, smore_fusion
+  embedding_dim: 768
+  max_history_length: 10
+
+lvlm:
+  model_type: "gemini"  # gemini, gpt4v, llava
+  temperature: 0.3
+  max_tokens: 200
+  prompt: "Describe this product in 2-3 sentences. Focus on key features and benefits: {item_id}"
+
+evaluation:
+  k_values: [5, 10, 20]
+  metrics: ["recall", "ndcg", "hit_rate"]
+  use_validation: true  
+
+system:
+  seed: 42
+  device: "cuda"  # cuda or cpu
