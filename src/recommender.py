@@ -20,18 +20,14 @@ class BaseRecommender:
         print(f"Built index with {len(item_ids)} items, embedding dimension: {item_embeddings.shape[1]}")
     
     def recommend(self, user_history: List[int], k: int = 10, exclude_history: bool = True) -> List[int]:
-        # Compute user profile, which is a mean of history embeddings
         history_embeddings = self.item_embeddings[user_history]
         user_profile = history_embeddings.mean(axis=0).reshape(1, -1)
         
-        # Cosine similarity
         similarities = cosine_similarity(user_profile, self.item_embeddings)[0]
         
-        # If requested, exclude history items
         if exclude_history:
             similarities[user_history] = -np.inf
         
-        # Get top-k
         top_k_indices = np.argsort(similarities)[-k:][::-1]
         return self.item_ids[top_k_indices].tolist()
 
@@ -51,21 +47,20 @@ class LVLMEnhancedRecommender(BaseRecommender):
     
     def _load_encoder(self):
         if self.encoder is None:
-            from sentence_transformers import SentenceTransformer # Lazy load sentence transformer
+            from sentence_transformers import SentenceTransformer
             self.encoder = SentenceTransformer(self.encoder_model, device=self.device)
             print(f"Loaded encoder: {self.encoder_model}")
     
     def build_item_index(self, summaries: Dict[int, str], item_ids: List[int]):
         self.item_ids = np.array(item_ids)
         
-        missing = [item_id for item_id in item_ids if item_id not in summaries] # missing summaries check
+        missing = [item_id for item_id in item_ids if item_id not in summaries]
         if missing:
             raise ValueError(f"Missing summaries for {len(missing)} items.")
         
         print(f"Encoding {len(item_ids)} LVLM summaries with Sentence-BERT...")
         self._load_encoder()
         
-        # Encode all summaries
         summary_texts = [summaries[item_id] for item_id in item_ids]
         self.item_embeddings = self.encoder.encode(
             summary_texts, 
@@ -91,10 +86,8 @@ class SMOREFusionRecommender(BaseRecommender):
         self.image_embeddings = image_embeddings
         self.item_ids = np.array(item_ids)
         
-        # Smore fusion 
         self.item_embeddings = (self.text_weight * text_embeddings + self.image_weight * image_embeddings)
         
-        # Normalize
         norms = np.linalg.norm(self.item_embeddings, axis=1, keepdims=True)
         self.item_embeddings = self.item_embeddings / (norms + 1e-8)
         

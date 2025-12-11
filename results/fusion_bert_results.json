@@ -1,0 +1,33 @@
+{
+  "1. Title-Only (BERT)": {
+    "recall@10": 0.28998569384835476,
+    "ndcg@10": 0.1680905790037701
+  },
+  "2. Vision-Only": {
+    "recall@10": 0.13383404864091558,
+    "ndcg@10": 0.07852189464142106
+  },
+  "3. Title+Vision (Naive 50/50)": {
+    "recall@10": 0.22732474964234622,
+    "ndcg@10": 0.12791717280189666
+  },
+  "4. Title+Vision (Concat)": {
+    "recall@10": 0.23376251788268956,
+    "ndcg@10": 0.13069129462509843
+  },
+  "5. Attention Fusion (Trained)": {
+    "recall@10": 0.26702432045779684,
+    "ndcg@10": 0.15458126775842268,
+    "status": "trained"
+  },
+  "6. Gating Fusion (Trained)": {
+    "recall@10": 0.20429184549356222,
+    "ndcg@10": 0.11312114423829493,
+    "status": "trained"
+  },
+  "7. Cross-Modal Attention (Trained)": {
+    "recall@10": 0.18129470672389128,
+    "ndcg@10": 0.09997245614808052,
+    "status": "trained"
+  }
+}

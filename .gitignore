@@ -51,14 +51,21 @@ data/summaries/*
 logs/
 *.log
 
-# Model checkpoints
+# Model checkpoints (but keep models/fusion_bert/ for trained models)
 checkpoints/
-*.pt
-*.pth
-*.ckpt
+models/fusion/  # Old fusion models, superseded by fusion_bert
 
-# Results
-results/
+# Results (keep final results for reference)
 outputs/
 
+# Archive folder (development/experimental files)
+archive/
+
+# Context folder (old documentation)
 context/
+
+# Evaluation package (transfer files, not needed in repo)
+evaluation_package/
+
+# Image files (too large)
+data/images/

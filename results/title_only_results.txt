@@ -1,0 +1,13 @@
+Model: title_only
+Dataset: Clothing_Shoes_and_Jewelry-clip_clip
+Device: cuda
+
+recall@5: 0.1805
+ndcg@5: 0.1479
+hit_rate@5: 0.2206
+recall@10: 0.2090
+ndcg@10: 0.1575
+hit_rate@10: 0.2539
+recall@20: 0.2325
+ndcg@20: 0.1641
+hit_rate@20: 0.2827

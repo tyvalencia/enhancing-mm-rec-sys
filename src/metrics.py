@@ -8,7 +8,7 @@ from collections import defaultdict
 
 
 def recall_at_k(actual: List[int], predicted: List[int], k: int) -> float:
-    if not actual: # no item check
+    if not actual:
         return 0.0
     
     predicted_k = set(predicted[:k])
@@ -27,13 +27,11 @@ def ndcg_at_k(actual: List[int], predicted: List[int], k: int) -> float:
     predicted_k = predicted[:k]
     actual_set = set(actual)
     
-    # Compute DCG
     dcg = 0.0
     for i, item in enumerate(predicted_k):
         if item in actual_set:
             dcg += 1.0 / np.log2(i + 2)
     
-    # Compute IDCG (ideal DCG)
     idcg = 0.0
     for i in range(min(len(actual), k)):
         idcg += 1.0 / np.log2(i + 2)
@@ -57,6 +55,7 @@ def hit_rate_at_k(actual: List[int], predicted: List[int], k: int) -> float:
     else:
         return 0.0
 
+
 def average_precision_at_k(actual: List[int], predicted: List[int], k: int) -> float:
     if not actual:
         return 0.0
@@ -78,7 +77,7 @@ def average_precision_at_k(actual: List[int], predicted: List[int], k: int) -> f
     return score / min(len(actual), k)
 
 
-def evaluate_model(recommendations: Dict[str, List[int]],ground_truth: Dict[str, List[int]],
+def evaluate_model(recommendations: Dict[str, List[int]], ground_truth: Dict[str, List[int]],
     k_values: List[int] = [5, 10, 20]) -> Dict[str, float]:
     results = defaultdict(list)
     
@@ -116,4 +115,3 @@ def print_evaluation_results(results: Dict[str, float]):
                 print(f"  {metric:20s}: {score:.4f}")
     
     print("="*50 + "\n")
-

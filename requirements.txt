@@ -1,14 +1,16 @@
 # LVLMs
 google-generativeai>=0.3.0  # For Gemini
-# other options we can try: 
-# openai>=1.0.0 
+openai>=1.0.0  # For GPT-4V
+accelerate>=0.25.0  # For LLaVA/LLaVA-NeXT model loading
+bitsandbytes>=0.41.0  # For 4-bit quantization (faster inference)
 
-# ML
+# ML & Deep Learning
 numpy>=1.24.0
 pandas>=2.0.0
 torch>=2.0.0
 torchvision>=0.15.0
 transformers>=4.35.0
+sentence-transformers>=2.2.0  # For Sentence-BERT
 pillow>=10.0.0
 
 # Data & Config
@@ -16,4 +18,7 @@ tqdm>=4.65.0
 pyyaml>=6.0
 python-dotenv>=1.0.0
 scikit-learn>=1.3.0
+
+# Visualization (for future)
 matplotlib>=3.7.0
+seaborn>=0.12.0

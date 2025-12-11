@@ -1,0 +1,13 @@
+Model: lvlm_enhanced
+Dataset: Clothing_Shoes_and_Jewelry-clip_clip
+Device: cuda
+
+recall@5: 0.1962
+ndcg@5: 0.1612
+hit_rate@5: 0.2380
+recall@10: 0.2218
+ndcg@10: 0.1700
+hit_rate@10: 0.2705
+recall@20: 0.2454
+ndcg@20: 0.1768
+hit_rate@20: 0.2978

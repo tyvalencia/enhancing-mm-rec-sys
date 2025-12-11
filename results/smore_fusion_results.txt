@@ -1,0 +1,13 @@
+Model: smore_fusion
+Dataset: Clothing_Shoes_and_Jewelry-clip_clip
+Device: cuda
+
+recall@5: 0.1412
+ndcg@5: 0.1139
+hit_rate@5: 0.1747
+recall@10: 0.1720
+ndcg@10: 0.1243
+hit_rate@10: 0.2118
+recall@20: 0.2076
+ndcg@20: 0.1344
+hit_rate@20: 0.2548

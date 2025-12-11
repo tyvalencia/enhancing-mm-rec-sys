@@ -1,0 +1,14 @@
+{
+  "Attention Fusion": {
+    "recall@10": NaN,
+    "ndcg@10": NaN
+  },
+  "Gating Fusion": {
+    "recall@10": NaN,
+    "ndcg@10": NaN
+  },
+  "Cross-Modal Attention": {
+    "recall@10": NaN,
+    "ndcg@10": NaN
+  }
+}

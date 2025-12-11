@@ -1,0 +1,12 @@
+{
+  "Attention Fusion": {
+    "recall@10": 0.0,
+    "ndcg@10": 0.0,
+    "n_users": 0
+  },
+  "Gating Fusion": {
+    "recall@10": 0.0,
+    "ndcg@10": 0.0,
+    "n_users": 0
+  }
+}
