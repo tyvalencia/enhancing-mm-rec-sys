@@ -84,7 +84,7 @@ pip install -r requirements.txt
 
 ### 1. Download Kaggle Dataset
 
-Download the [Kaggle Multimodal Recommendation System Dataset](https://www.kaggle.com/competitions/multimodal-recommendation) and extract to `data/raw/archive/`.
+Download the [Kaggle Multimodal Recommendation System Datasets](https://www.kaggle.com/datasets/ignacioavas/alignmacrid-vae) and extract to `data/raw/archive/`.
 
 ### 2. Prepare Data
 
